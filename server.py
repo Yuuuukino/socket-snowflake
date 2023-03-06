@@ -18,9 +18,8 @@ s.bind((SERVER_HOST, SERVER_PORT))
 #设置连接监听数
 s.listen(5)
 print(f"服务器监听{SERVER_HOST}:{SERVER_PORT}")
-client_socket = None
 # 导入雪花生成器
-worker = snowflake.creare_worker()
+worker = snowflake.create_worker()
 
 while 1:
     try:
@@ -35,13 +34,14 @@ while 1:
         # print("received: ", received) # bilibili.jpg<SEPARATOR>35834
         file_name, file_size = received.split(SEPARATOR)
         # file_name = os.path.basename(file_name)
-        print("hhh:", path + '/' + file_name)
+        file_path = path + '/' + file_name
+        print(file_path)
         file_size = int(file_size)
         #文件接受
         progress = tqdm.tqdm(range(file_size), f"接受{file_name}",
                              unit = "B", unit_divisor=1024, unit_scale=True)
 
-        with open(file_name, 'wb') as f:
+        with open(file_path, 'wb') as f:
             for _ in progress:
                 bytes_read = client_socket.recv(BUFFER_SIZE)
                 if not bytes_read:
@@ -49,8 +49,7 @@ while 1:
                     break
                 f.write(bytes_read)
                 progress.update(len(bytes_read))
-
-    except:
         client_socket.close()
+    except:
         s.close()
         break

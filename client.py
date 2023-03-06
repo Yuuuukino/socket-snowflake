@@ -10,11 +10,12 @@ port = 12121
 # 传输缓冲区
 BUFFER_SIZE = 4096
 # 传输文件
-file_name = 'acfun.zip'
+file_name = 'bilibili.jpg'
 # 文件大小
 file_size = os.path.getsize(file_name)
 # 创建socketl连接
 s = socket.socket()
+print()
 print(f"服务器连接中{host}:{port}")
 s.connect((host, port))
 print("连接成功")
