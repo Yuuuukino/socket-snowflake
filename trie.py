@@ -34,8 +34,8 @@ def cut_into_blocks(path, snowid):
 # block_len = 8
 # blocks = int(64 / block_len)
 def insert(snowid) -> str:
-    if not os.path.exists('./tmp'):
-        os.makedirs('./tmp')
+    # if not os.path.exists('./tmp'):
+    #     os.makedirs('./tmp')
     path = './trie'
     if not os.path.exists(path):
         os.makedirs(path)

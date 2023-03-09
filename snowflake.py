@@ -87,6 +87,6 @@ class IdWorker(object):
         return timestamp
 
 
-def create_worker(houseid=1, computerid=1):
+def create_worker(houseid=0, computerid=0):
     sample_worker = IdWorker(houseid, computerid)
     return sample_worker

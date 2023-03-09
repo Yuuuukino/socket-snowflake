@@ -1,0 +1,3 @@
+netstat -apn  |  grep 12121 查看对应端口运行的程序
+kill -9 14134 杀掉对应pid的程序
+ps -ef | grep 12121

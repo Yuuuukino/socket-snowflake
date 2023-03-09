@@ -1,7 +1,6 @@
 import os
 import tqdm
 import socket
-
 import trie
 import snowflake
 
@@ -21,6 +20,7 @@ print(f"服务器监听{SERVER_HOST}:{SERVER_PORT}")
 # 导入雪花生成器
 worker = snowflake.create_worker()
 
+
 while 1:
     try:
         client_socket, address = s.accept()
@@ -35,7 +35,7 @@ while 1:
         file_name, file_size = received.split(SEPARATOR)
         # file_name = os.path.basename(file_name)
         file_path = path + '/' + file_name
-        print(file_path)
+        # print(file_path)
         file_size = int(file_size)
         #文件接受
         progress = tqdm.tqdm(range(file_size), f"接受{file_name}",
@@ -44,11 +44,15 @@ while 1:
         with open(file_path, 'wb') as f:
             for _ in progress:
                 bytes_read = client_socket.recv(BUFFER_SIZE)
-                if not bytes_read:
+                # print(len(bytes_read))
+                if len(bytes_read) > 0:
+                    f.write(bytes_read)
+                    progress.update(len(bytes_read))
+                else:
+                    # print("no data")
                     progress.close()
                     break
-                f.write(bytes_read)
-                progress.update(len(bytes_read))
+        client_socket.send((SERVER_HOST +  "/hy" + file_path[1:]).encode())
         client_socket.close()
     except:
         s.close()
