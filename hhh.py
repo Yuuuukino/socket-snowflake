@@ -52,8 +52,7 @@ while 1:
                     # print("no data")
                     progress.close()
                     break
-        print("sendto", (SERVER_HOST +  "/ServerPackage" + file_path[1:]).encode())
-        client_socket.send((SERVER_HOST +  "/ServerPackage" + file_path[1:]).encode())
+        client_socket.send((SERVER_HOST +  "/hy" + file_path[1:]).encode())
         client_socket.close()
     except:
         s.close()
