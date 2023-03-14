@@ -37,7 +37,8 @@ SEM = 2
 # print(task1.result())
 
 sem = threading.Semaphore(SEM)
-def serve():
+def serve(client_socket, address):
+    print("sem: ", sem)
     with sem:
         # 生成雪花路径
         snowid = worker.get_id()
@@ -46,11 +47,12 @@ def serve():
         print(f"客户端{address}连接")
         # 接受客户端信息
         received = client_socket.recv(BUFFER_SIZE).decode()
-        # print("received: ", received) # bilibili.jpg<SEPARATOR>35834
         file_name, file_size = received.split(SEPARATOR)
         # file_name = os.path.basename(file_name)
         file_path = path + '/' + file_name
-        # print(file_path)
+
+        # client_socket.send((SERVER_HOST +  "/ServerPackage" + file_path[1:]).encode())
+
         file_size = int(file_size)
         #文件接受
         progress = tqdm.tqdm(range(file_size), f"接受{file_name}",
@@ -59,12 +61,10 @@ def serve():
         with open(file_path, 'wb') as f:
             for _ in progress:
                 bytes_read = client_socket.recv(BUFFER_SIZE)
-                # print(len(bytes_read))
                 if len(bytes_read) > 0:
                     f.write(bytes_read)
                     progress.update(len(bytes_read))
                 else:
-                    # print("no data")
                     progress.close()
                     break
         print("sendto", (SERVER_HOST +  "/ServerPackage" + file_path[1:]).encode())
@@ -74,7 +74,7 @@ def serve():
 while 1:
     try:
         client_socket, address = s.accept()
-        thr = threading.Thread(target=serve)
+        thr = threading.Thread(target=serve, args=(client_socket, address))
         thr.start()
     except:
         s.close()
